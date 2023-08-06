@@ -1,9 +1,12 @@
 package com.eletronica.JJProject.services;
 
+import com.eletronica.JJProject.data.vo.v1.ProductVO;
 import com.eletronica.JJProject.exceptions.ResourceNotFoundException;
-import com.eletronica.JJProject.model.Product;
+import com.eletronica.JJProject.mapper.ProductMapper;
 import com.eletronica.JJProject.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,31 +20,48 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    public List<Product> findAll(){
+    @Autowired
+    private ProductMapper mapper;
+
+    public List<ProductVO> findAll(){
         logger.info("Finding all products");
-        return repository.findAll();
+        return mapper.convertListToVO(repository.findAll());
     }
 
-    public Product findById(Long id){
+    public ProductVO findById(Long id){
         logger.info("Finding one product");
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+
+        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+
+        return mapper.convertEntityToVO(entity);
     }
 
-    public Product create(Product product){
-        logger.info("Creating one person");
-        return repository.save(product);
+    public ProductVO create(ProductVO product){
+        logger.info("Creating one product");
+
+        var entity = mapper.convertVoToEntity(product);
+        var vo = mapper.convertEntityToVO(repository.save(entity));
+        return vo;
     }
 
-    public Product update(Product product){
+    public ProductVO update(ProductVO product){
         logger.info("Updating one product");
 
-        return null;
+        var entity = repository.findById(product.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+
+        entity.setName(product.getName());
+        entity.setPrice(product.getPrice());
+        entity.setType(product.getType());
+
+        var vo = mapper.convertEntityToVO(repository.save(entity));
+        return vo;
     }
 
     public void delete(Long id){
         logger.info("Deleting one product");
+
+        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        repository.delete(entity);
     }
-
-
 
 }

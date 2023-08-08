@@ -19,15 +19,18 @@ public class Product {
     private Double price;
     @Column(nullable = false)
     private String type;
+    @Column(nullable = false)
+    private int quantity;
 
     public Product(){
     }
 
-    public Product(Long id, String name, Double price, String type){
+    public Product(Long id, String name, Double price, String type, int quantity){
         this.id = id;
         this.name = name;
         this.price = price;
         this.type = type;
+        this.quantity = quantity;
     }
 
     public Long getId(){
@@ -62,16 +65,24 @@ public class Product {
         this.type = type;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(price, product.price) && Objects.equals(type, product.type);
+        return quantity == product.quantity && Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(price, product.price) && Objects.equals(type, product.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, type);
+        return Objects.hash(id, name, price, type, quantity);
     }
 }

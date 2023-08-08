@@ -16,6 +16,7 @@ public class ProductMapper {
         vo.setName(product.getName());
         vo.setPrice(product.getPrice());
         vo.setType(product.getType());
+        vo.setQuantity(product.getQuantity());
         return vo;
     }
 
@@ -25,6 +26,7 @@ public class ProductMapper {
         entity.setName(product.getName());
         entity.setPrice(product.getPrice());
         entity.setType(product.getType());
+        entity.setQuantity(product.getQuantity());
         return entity;
     }
 

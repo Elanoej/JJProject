@@ -9,6 +9,7 @@ public class ProductVO implements Serializable {
     private String name;
     private Double price;
     private String type;
+    private int quantity;
 
     public ProductVO(){
     }
@@ -45,16 +46,24 @@ public class ProductVO implements Serializable {
         this.type = type;
     }
 
+    public int getQuantity(){
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductVO productVO = (ProductVO) o;
-        return Objects.equals(id, productVO.id) && Objects.equals(name, productVO.name) && Objects.equals(price, productVO.price) && Objects.equals(type, productVO.type);
+        return quantity == productVO.quantity && Objects.equals(id, productVO.id) && Objects.equals(name, productVO.name) && Objects.equals(price, productVO.price) && Objects.equals(type, productVO.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, type);
+        return Objects.hash(id, name, price, type, quantity);
     }
 }

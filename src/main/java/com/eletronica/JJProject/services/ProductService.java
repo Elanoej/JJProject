@@ -52,6 +52,7 @@ public class ProductService {
         entity.setName(product.getName());
         entity.setPrice(product.getPrice());
         entity.setType(product.getType());
+        entity.setQuantity(product.getQuantity());
 
         var vo = mapper.convertEntityToVO(repository.save(entity));
         return vo;

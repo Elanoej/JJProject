@@ -40,6 +40,7 @@ public class ProductController {
         return  ResponseEntity.status(HttpStatus.OK).body(service.update(product));
     }
 
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(value = "id") Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();

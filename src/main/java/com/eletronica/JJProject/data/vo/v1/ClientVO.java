@@ -1,40 +1,22 @@
-package com.eletronica.JJProject.model;
+package com.eletronica.JJProject.data.vo.v1;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.eletronica.JJProject.model.ServiceOrder;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity
-@Table(name = "clients")
-public class Client implements Serializable {
+public class ClientVO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false)
     private String name;
-    @Column
     private String address;
-    @Column(nullable = false)
     private String cellphone;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private Set<ServiceOrder> serviceOrders = new HashSet<>();
 
-    public Client(){
-    }
-
-    public Client(Integer id, String name, String address, String cellphone){
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.cellphone = cellphone;
+    public ClientVO(){
     }
 
     public Integer getId() {
@@ -81,8 +63,8 @@ public class Client implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(address, client.address) && Objects.equals(cellphone, client.cellphone);
+        ClientVO clientVO = (ClientVO) o;
+        return Objects.equals(id, clientVO.id) && Objects.equals(name, clientVO.name) && Objects.equals(address, clientVO.address) && Objects.equals(cellphone, clientVO.cellphone);
     }
 
     @Override

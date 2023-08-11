@@ -4,6 +4,7 @@ import com.eletronica.JJProject.data.vo.v1.ServiceOrderVO;
 import com.eletronica.JJProject.model.ServiceOrder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,11 @@ public class ServiceOrderMapper {
     public ServiceOrder convertVOToEntity(ServiceOrderVO serviceOrderVO){
         ServiceOrder entity = new ServiceOrder();
         entity.setId(serviceOrderVO.getId());
-        entity.setDate(serviceOrderVO.getDate());
+        if(serviceOrderVO.getDate() == null){
+            entity.setDate(Instant.now());
+        }else{
+            entity.setDate(serviceOrderVO.getDate());
+        }
         entity.setClient(serviceOrderVO.getClient());
         entity.setProductDetails(serviceOrderVO.getProductDetails());
         entity.setProductModel(serviceOrderVO.getProductModel());

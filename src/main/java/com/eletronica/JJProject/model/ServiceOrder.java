@@ -1,7 +1,5 @@
 package com.eletronica.JJProject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -16,7 +14,6 @@ public class ServiceOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_so")
     private Integer id;
-    @Temporal(TemporalType.DATE)
     private Instant date;
     @ManyToOne
     @JoinColumn(name = "client-id")

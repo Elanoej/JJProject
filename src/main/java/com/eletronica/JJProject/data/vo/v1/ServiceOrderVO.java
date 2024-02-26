@@ -1,14 +1,19 @@
 package com.eletronica.JJProject.data.vo.v1;
 
 import com.eletronica.JJProject.model.Client;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
-public class ServiceOrderVO implements Serializable {
+@JsonPropertyOrder({"id", "date", "client", "productModel", "productDetails", "clientInfos", "tecInfos"})
+public class ServiceOrderVO extends RepresentationModel<ServiceOrderVO> implements Serializable {
 
-    private Integer id;
+    @JsonProperty("id")
+    private Integer key;
     private Instant date;
     private Client client;
     private String productModel;
@@ -19,12 +24,12 @@ public class ServiceOrderVO implements Serializable {
     public ServiceOrderVO(){
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getKey() {
+        return key;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setKey(Integer key) {
+        this.key = key;
     }
 
     public Instant getDate() {
@@ -79,12 +84,13 @@ public class ServiceOrderVO implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         ServiceOrderVO that = (ServiceOrderVO) o;
-        return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(client, that.client) && Objects.equals(productModel, that.productModel) && Objects.equals(productDetails, that.productDetails) && Objects.equals(clientInfos, that.clientInfos) && Objects.equals(tecInfos, that.tecInfos);
+        return Objects.equals(key, that.key) && Objects.equals(date, that.date) && Objects.equals(client, that.client) && Objects.equals(productModel, that.productModel) && Objects.equals(productDetails, that.productDetails) && Objects.equals(clientInfos, that.clientInfos) && Objects.equals(tecInfos, that.tecInfos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, date, client, productModel, productDetails, clientInfos, tecInfos);
+        return Objects.hash(super.hashCode(), key, date, client, productModel, productDetails, clientInfos, tecInfos);
     }
 }

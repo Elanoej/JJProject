@@ -2,6 +2,7 @@ package com.eletronica.JJProject.controllers;
 
 import com.eletronica.JJProject.data.vo.v1.ServiceOrderVO;
 import com.eletronica.JJProject.services.SOService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,9 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Service Order", description = "Service Order API")
 @RestController
 @CrossOrigin(allowedHeaders = "*", origins = "*")
-@RequestMapping("/service-order")
+@RequestMapping("/api/service-order")
 public class SOController {
 
     @Autowired

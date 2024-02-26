@@ -13,7 +13,7 @@ public class ServiceOrderMapper {
 
     public ServiceOrderVO convertEntityToVO(ServiceOrder serviceOrder){
         ServiceOrderVO vo = new ServiceOrderVO();
-        vo.setId(serviceOrder.getId());
+        vo.setKey(serviceOrder.getId());
         vo.setDate(serviceOrder.getDate());
         vo.setClient(serviceOrder.getClient());
         vo.setProductDetails(serviceOrder.getProductDetails());
@@ -25,7 +25,7 @@ public class ServiceOrderMapper {
 
     public ServiceOrder convertVOToEntity(ServiceOrderVO serviceOrderVO){
         ServiceOrder entity = new ServiceOrder();
-        entity.setId(serviceOrderVO.getId());
+        entity.setId(serviceOrderVO.getKey());
         if(serviceOrderVO.getDate() == null){
             entity.setDate(Instant.now());
         }else{

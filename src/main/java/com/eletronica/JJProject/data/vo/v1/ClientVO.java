@@ -1,30 +1,35 @@
 package com.eletronica.JJProject.data.vo.v1;
 
 import com.eletronica.JJProject.model.ServiceOrder;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class ClientVO implements Serializable {
 
-    private Integer id;
+@JsonPropertyOrder({ "id", "name", "address", "cellphone", "serviceOrders"})
+public class ClientVO extends RepresentationModel<ClientVO> implements Serializable {
+
+    @JsonProperty("id")
+    private Integer key;
     private String name;
     private String address;
     private String cellphone;
 
     private Set<ServiceOrder> serviceOrders = new HashSet<>();
 
-    public ClientVO(){
+    public ClientVO() {
+    }
+    public Integer getKey() {
+        return key;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setKey(Integer key) {
+        this.key = key;
     }
 
     public String getName() {
@@ -63,12 +68,13 @@ public class ClientVO implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         ClientVO clientVO = (ClientVO) o;
-        return Objects.equals(id, clientVO.id) && Objects.equals(name, clientVO.name) && Objects.equals(address, clientVO.address) && Objects.equals(cellphone, clientVO.cellphone);
+        return Objects.equals(key, clientVO.key) && Objects.equals(name, clientVO.name) && Objects.equals(address, clientVO.address) && Objects.equals(cellphone, clientVO.cellphone) && Objects.equals(serviceOrders, clientVO.serviceOrders);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address, cellphone);
+        return Objects.hash(super.hashCode(), key, name, address, cellphone, serviceOrders);
     }
 }

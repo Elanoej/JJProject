@@ -2,6 +2,7 @@ package com.eletronica.JJProject.controllers;
 
 import com.eletronica.JJProject.data.vo.v1.ProductVO;
 import com.eletronica.JJProject.services.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Product", description = "Product API")
 @RestController
 @CrossOrigin(allowedHeaders = "*", origins = "*")
-@RequestMapping("/product")
+@RequestMapping("/api/product")
 public class ProductController {
 
     @Autowired
@@ -24,7 +26,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductVO> findById(@PathVariable(value = "id") Long id){
+    public ResponseEntity<ProductVO> findById(@PathVariable(value = "id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
 

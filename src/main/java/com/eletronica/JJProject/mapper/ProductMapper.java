@@ -12,7 +12,7 @@ public class ProductMapper {
 
     public ProductVO convertEntityToVO(Product product){
         ProductVO vo = new ProductVO();
-        vo.setId(product.getId());
+        vo.setKey(product.getId());
         vo.setName(product.getName());
         vo.setPrice(product.getPrice());
         vo.setType(product.getType());
@@ -22,7 +22,7 @@ public class ProductMapper {
 
     public Product convertVoToEntity(ProductVO product){
         Product entity = new Product();
-        entity.setId(product.getId());
+        entity.setId(product.getKey());
         entity.setName(product.getName());
         entity.setPrice(product.getPrice());
         entity.setType(product.getType());

@@ -1,11 +1,17 @@
 package com.eletronica.JJProject.data.vo.v1;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.springframework.hateoas.RepresentationModel;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-public class ProductVO implements Serializable {
+@JsonPropertyOrder({ "id", "name", "price", "type", "quantity"})
+public class ProductVO extends RepresentationModel<ProductVO> implements Serializable {
 
-    private Long id;
+    @JsonProperty("id")
+    private Long key;
     private String name;
     private Double price;
     private String type;
@@ -14,12 +20,12 @@ public class ProductVO implements Serializable {
     public ProductVO(){
     }
 
-    public Long getId() {
-        return id;
+    public Long getKey() {
+        return key;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setKey(Long key) {
+        this.key = key;
     }
 
     public String getName() {
@@ -59,11 +65,11 @@ public class ProductVO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductVO productVO = (ProductVO) o;
-        return quantity == productVO.quantity && Objects.equals(id, productVO.id) && Objects.equals(name, productVO.name) && Objects.equals(price, productVO.price) && Objects.equals(type, productVO.type);
+        return quantity == productVO.quantity && Objects.equals(key, productVO.key) && Objects.equals(name, productVO.name) && Objects.equals(price, productVO.price) && Objects.equals(type, productVO.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, type, quantity);
+        return Objects.hash(key, name, price, type, quantity);
     }
 }

@@ -12,7 +12,7 @@ public class ClientMapper {
 
     public ClientVO convertEntityToVO(Client client){
         ClientVO vo = new ClientVO();
-        vo.setId(client.getId());
+        vo.setKey(client.getId());
         vo.setName(client.getName());
         vo.setAddress(client.getAddress());
         vo.setCellphone(client.getCellphone());
@@ -22,7 +22,7 @@ public class ClientMapper {
 
     public Client convertVoToEntity(ClientVO client){
         Client entity = new Client();
-        entity.setId(client.getId());
+        entity.setId(client.getKey());
         entity.setName(client.getName());
         entity.setAddress(client.getAddress());
         entity.setCellphone(client.getCellphone());

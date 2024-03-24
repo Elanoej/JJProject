@@ -1,4 +1,4 @@
-package com.eletronica.JJProject.data.vo.v1;
+package com.eletronica.JJProject.data.dto.v1;
 
 import com.eletronica.JJProject.model.ServiceOrder;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +12,7 @@ import java.util.Set;
 
 
 @JsonPropertyOrder({ "id", "name", "address", "cellphone", "serviceOrders"})
-public class ClientVO extends RepresentationModel<ClientVO> implements Serializable {
+public class ClientDTO extends RepresentationModel<ClientDTO> implements Serializable {
 
     @JsonProperty("id")
     private Integer key;
@@ -22,7 +22,7 @@ public class ClientVO extends RepresentationModel<ClientVO> implements Serializa
 
     private Set<ServiceOrder> serviceOrders = new HashSet<>();
 
-    public ClientVO() {
+    public ClientDTO() {
     }
     public Integer getKey() {
         return key;
@@ -69,8 +69,8 @@ public class ClientVO extends RepresentationModel<ClientVO> implements Serializa
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        ClientVO clientVO = (ClientVO) o;
-        return Objects.equals(key, clientVO.key) && Objects.equals(name, clientVO.name) && Objects.equals(address, clientVO.address) && Objects.equals(cellphone, clientVO.cellphone) && Objects.equals(serviceOrders, clientVO.serviceOrders);
+        ClientDTO clientDTO = (ClientDTO) o;
+        return Objects.equals(key, clientDTO.key) && Objects.equals(name, clientDTO.name) && Objects.equals(address, clientDTO.address) && Objects.equals(cellphone, clientDTO.cellphone) && Objects.equals(serviceOrders, clientDTO.serviceOrders);
     }
 
     @Override

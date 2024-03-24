@@ -2,7 +2,7 @@ package com.eletronica.JJProject.services;
 
 import com.eletronica.JJProject.controllers.ClientController;
 import com.eletronica.JJProject.controllers.SOController;
-import com.eletronica.JJProject.data.vo.v1.ClientVO;
+import com.eletronica.JJProject.data.dto.v1.ClientDTO;
 import com.eletronica.JJProject.exceptions.ResourceNotFoundException;
 import com.eletronica.JJProject.mapper.ClientMapper;
 import com.eletronica.JJProject.repositories.ClientRepository;
@@ -28,51 +28,40 @@ public class ClientService {
     @Autowired
     private ClientMapper mapper;
 
-    public List<ClientVO> findAll(){
+    public List<ClientDTO> findAll(){
         logger.info("Finding all clients");
 
-        var vos = mapper.convertListToVO(repository.findAll(Sort.by("id")));
-        vos = vos.stream().map(clientVO -> {
-            clientVO.add(linkTo(methodOn(ClientController.class).findById(clientVO.getKey())).withSelfRel());
-            var clientSO = clientVO.getServiceOrders();
-            if(!clientSO.isEmpty()){
-                clientSO.forEach(serviceOrder -> clientVO.add(linkTo(methodOn(SOController.class).findById(serviceOrder.getId())).withRel("service-order")));
-            }
-            return clientVO;
-        }).collect(Collectors.toList());
-        return vos;
+        var clientDTOS = mapper.convertListToDTO(repository.findAll(Sort.by("id")));
+        return clientDTOS.stream().map(this::addHateoas).collect(Collectors.toList());
     }
 
-    public ClientVO findById(Integer id){
+    public ClientDTO findById(Integer id){
         logger.info("Finding one client");
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
-        var vo = mapper.convertEntityToVO(entity);
-        vo.add(linkTo(methodOn(ClientController.class).findById(vo.getKey())).withSelfRel());
-        return vo;
+        var dto = mapper.convertEntityToDTO(entity);
+        return addHateoas(dto);
     }
 
-    public ClientVO create(ClientVO clientVO){
+    public ClientDTO create(ClientDTO clientDTO){
         logger.info("Creating one client");
 
-        var entity = mapper.convertVoToEntity(clientVO);
-        var vo = mapper.convertEntityToVO(repository.save(entity));
-        vo.add(linkTo(methodOn(ClientController.class).findById(vo.getKey())).withSelfRel());
-        return vo;
+        var entity = mapper.convertDTOToEntity(clientDTO);
+        var dto = mapper.convertEntityToDTO(repository.save(entity));
+        return addHateoas(dto);
     }
 
-    public ClientVO update(ClientVO clientVO){
+    public ClientDTO update(ClientDTO clientDTO){
         logger.info("Updating one client");
 
-        var entity = repository.findById(clientVO.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        var entity = repository.findById(clientDTO.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-        entity.setName(clientVO.getName());
-        entity.setAddress(clientVO.getAddress());
-        entity.setCellphone(clientVO.getCellphone());
+        entity.setName(clientDTO.getName());
+        entity.setAddress(clientDTO.getAddress());
+        entity.setCellphone(clientDTO.getCellphone());
 
-        var vo = mapper.convertEntityToVO(repository.save(entity));
-        vo.add(linkTo(methodOn(ClientController.class).findById(vo.getKey())).withSelfRel());
-        return vo;
+        var dto = mapper.convertEntityToDTO(repository.save(entity));
+        return addHateoas(dto);
     }
 
     public void delete(Integer id){
@@ -80,6 +69,14 @@ public class ClientService {
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         repository.delete(entity);
+    }
+
+    private ClientDTO addHateoas(ClientDTO dto){
+        dto.add(linkTo(methodOn(ClientController.class).findById(dto.getKey())).withSelfRel());
+        if(!dto.getServiceOrders().isEmpty()){
+            dto.getServiceOrders().forEach(so -> dto.add(linkTo(methodOn(SOController.class).findById(so.getId())).withRel("service-order")));
+        }
+        return dto;
     }
 
 }

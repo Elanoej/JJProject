@@ -1,4 +1,4 @@
-package com.eletronica.JJProject.data.vo.v1;
+package com.eletronica.JJProject.data.dto.v1;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @JsonPropertyOrder({ "id", "name", "price", "type", "quantity"})
-public class ProductVO extends RepresentationModel<ProductVO> implements Serializable {
+public class ProductDTO extends RepresentationModel<ProductDTO> implements Serializable {
 
     @JsonProperty("id")
     private Long key;
@@ -17,7 +17,7 @@ public class ProductVO extends RepresentationModel<ProductVO> implements Seriali
     private String type;
     private int quantity;
 
-    public ProductVO(){
+    public ProductDTO(){
     }
 
     public Long getKey() {
@@ -64,8 +64,8 @@ public class ProductVO extends RepresentationModel<ProductVO> implements Seriali
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductVO productVO = (ProductVO) o;
-        return quantity == productVO.quantity && Objects.equals(key, productVO.key) && Objects.equals(name, productVO.name) && Objects.equals(price, productVO.price) && Objects.equals(type, productVO.type);
+        ProductDTO productDTO = (ProductDTO) o;
+        return quantity == productDTO.quantity && Objects.equals(key, productDTO.key) && Objects.equals(name, productDTO.name) && Objects.equals(price, productDTO.price) && Objects.equals(type, productDTO.type);
     }
 
     @Override

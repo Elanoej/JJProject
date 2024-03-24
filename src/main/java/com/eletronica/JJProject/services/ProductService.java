@@ -1,7 +1,7 @@
 package com.eletronica.JJProject.services;
 
 import com.eletronica.JJProject.controllers.ProductController;
-import com.eletronica.JJProject.data.vo.v1.ProductVO;
+import com.eletronica.JJProject.data.dto.v1.ProductDTO;
 import com.eletronica.JJProject.exceptions.ResourceNotFoundException;
 import com.eletronica.JJProject.mapper.ProductMapper;
 import com.eletronica.JJProject.repositories.ProductRepository;
@@ -27,34 +27,30 @@ public class ProductService {
     @Autowired
     private ProductMapper mapper;
 
-    public List<ProductVO> findAll(){
+    public List<ProductDTO> findAll(){
         logger.info("Finding all products");
 
-        var vos = mapper.convertListToVO(repository.findAll(Sort.by("id")));
-        vos = vos.stream().map(productVO ->
-                productVO.add(linkTo(methodOn(ProductController.class).findById(productVO.getKey())).withSelfRel()))
-                .collect(Collectors.toList());
-        return vos;
+        var dtos = mapper.convertListToVO(repository.findAll(Sort.by("id")));
+        return dtos.stream().map(this::addHateoas).collect(Collectors.toList());
     }
 
-    public ProductVO findById(Long id){
+    public ProductDTO findById(Long id){
         logger.info("Finding one product");
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
-        var vo = mapper.convertEntityToVO(entity).add(linkTo(methodOn(ProductController.class).findById(id)).withSelfRel());
-        return vo;
+        var dto = mapper.convertEntityToDTO(entity);
+        return addHateoas(dto);
     }
 
-    public ProductVO create(ProductVO product){
+    public ProductDTO create(ProductDTO product){
         logger.info("Creating one product");
 
-        var entity = mapper.convertVoToEntity(product);
-        var vo = mapper.convertEntityToVO(repository.save(entity));
-        vo.add(linkTo(methodOn(ProductController.class).findById(vo.getKey())).withSelfRel());
-        return vo;
+        var entity = mapper.convertDTOToEntity(product);
+        var dto = mapper.convertEntityToDTO(repository.save(entity));
+        return addHateoas(dto);
     }
 
-    public ProductVO update(ProductVO product){
+    public ProductDTO update(ProductDTO product){
         logger.info("Updating one product");
 
         var entity = repository.findById(product.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
@@ -64,9 +60,8 @@ public class ProductService {
         entity.setType(product.getType());
         entity.setQuantity(product.getQuantity());
 
-        var vo = mapper.convertEntityToVO(repository.save(entity));
-        vo.add(linkTo(methodOn(ProductController.class).findById(vo.getKey())).withSelfRel());
-        return vo;
+        var dto = mapper.convertEntityToDTO(repository.save(entity));
+        return addHateoas(dto);
     }
 
     public void delete(Long id){
@@ -74,6 +69,11 @@ public class ProductService {
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         repository.delete(entity);
+    }
+
+    private ProductDTO addHateoas(ProductDTO dto){
+        dto.add(linkTo(methodOn(ProductController.class).findById(dto.getKey())).withSelfRel());
+        return dto;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.eletronica.JJProject.mapper;
 
-import com.eletronica.JJProject.data.vo.v1.ClientVO;
+import com.eletronica.JJProject.data.dto.v1.ClientDTO;
 import com.eletronica.JJProject.model.Client;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +10,8 @@ import java.util.List;
 @Service
 public class ClientMapper {
 
-    public ClientVO convertEntityToVO(Client client){
-        ClientVO vo = new ClientVO();
+    public ClientDTO convertEntityToDTO(Client client){
+        ClientDTO vo = new ClientDTO();
         vo.setKey(client.getId());
         vo.setName(client.getName());
         vo.setAddress(client.getAddress());
@@ -20,7 +20,7 @@ public class ClientMapper {
         return vo;
     }
 
-    public Client convertVoToEntity(ClientVO client){
+    public Client convertDTOToEntity(ClientDTO client){
         Client entity = new Client();
         entity.setId(client.getKey());
         entity.setName(client.getName());
@@ -30,15 +30,15 @@ public class ClientMapper {
         return entity;
     }
 
-    public List<ClientVO> convertListToVO(List<Client> clients){
-        List<ClientVO> resultList = new ArrayList<>();
-        clients.forEach(client -> resultList.add(convertEntityToVO(client)));
+    public List<ClientDTO> convertListToDTO(List<Client> clients){
+        List<ClientDTO> resultList = new ArrayList<>();
+        clients.forEach(client -> resultList.add(convertEntityToDTO(client)));
         return resultList;
     }
 
-    public List<Client> convertListToEntity(List<ClientVO> voclients){
+    public List<Client> convertListToEntity(List<ClientDTO> dtoClients){
         List<Client> resultList = new ArrayList<>();
-        voclients.forEach(clientVO -> resultList.add(convertVoToEntity(clientVO)));
+        dtoClients.forEach(clientDTO -> resultList.add(convertDTOToEntity(clientDTO)));
         return resultList;
     }
 }

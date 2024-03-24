@@ -1,4 +1,4 @@
-package com.eletronica.JJProject.data.vo.v1;
+package com.eletronica.JJProject.data.dto.v1;
 
 import com.eletronica.JJProject.model.Client;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 @JsonPropertyOrder({"id", "date", "client", "productModel", "productDetails", "clientInfos", "tecInfos"})
-public class ServiceOrderVO extends RepresentationModel<ServiceOrderVO> implements Serializable {
+public class ServiceOrderDTO extends RepresentationModel<ServiceOrderDTO> implements Serializable {
 
     @JsonProperty("id")
     private Integer key;
@@ -21,7 +21,17 @@ public class ServiceOrderVO extends RepresentationModel<ServiceOrderVO> implemen
     private String clientInfos;
     private String tecInfos;
 
-    public ServiceOrderVO(){
+    public ServiceOrderDTO(){
+    }
+
+    public ServiceOrderDTO(Integer key, Instant date, Client client, String productModel, String productDetails, String clientInfos, String tecInfos) {
+        this.key = key;
+        this.date = date;
+        this.client = client;
+        this.productModel = productModel;
+        this.productDetails = productDetails;
+        this.clientInfos = clientInfos;
+        this.tecInfos = tecInfos;
     }
 
     public Integer getKey() {
@@ -85,7 +95,7 @@ public class ServiceOrderVO extends RepresentationModel<ServiceOrderVO> implemen
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        ServiceOrderVO that = (ServiceOrderVO) o;
+        ServiceOrderDTO that = (ServiceOrderDTO) o;
         return Objects.equals(key, that.key) && Objects.equals(date, that.date) && Objects.equals(client, that.client) && Objects.equals(productModel, that.productModel) && Objects.equals(productDetails, that.productDetails) && Objects.equals(clientInfos, that.clientInfos) && Objects.equals(tecInfos, that.tecInfos);
     }
 

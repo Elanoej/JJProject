@@ -1,6 +1,6 @@
 package com.eletronica.JJProject.mapper;
 
-import com.eletronica.JJProject.data.vo.v1.ProductVO;
+import com.eletronica.JJProject.data.dto.v1.ProductDTO;
 import com.eletronica.JJProject.model.Product;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +10,8 @@ import java.util.List;
 @Service
 public class ProductMapper {
 
-    public ProductVO convertEntityToVO(Product product){
-        ProductVO vo = new ProductVO();
+    public ProductDTO convertEntityToDTO(Product product){
+        ProductDTO vo = new ProductDTO();
         vo.setKey(product.getId());
         vo.setName(product.getName());
         vo.setPrice(product.getPrice());
@@ -20,7 +20,7 @@ public class ProductMapper {
         return vo;
     }
 
-    public Product convertVoToEntity(ProductVO product){
+    public Product convertDTOToEntity(ProductDTO product){
         Product entity = new Product();
         entity.setId(product.getKey());
         entity.setName(product.getName());
@@ -30,15 +30,15 @@ public class ProductMapper {
         return entity;
     }
 
-    public List<ProductVO> convertListToVO(List<Product> products){
-        List<ProductVO> resultList = new ArrayList<>();
-        products.forEach(product -> resultList.add(convertEntityToVO(product)));
+    public List<ProductDTO> convertListToVO(List<Product> products){
+        List<ProductDTO> resultList = new ArrayList<>();
+        products.forEach(product -> resultList.add(convertEntityToDTO(product)));
         return resultList;
     }
 
-    public List<Product> convertListToEntity(List<ProductVO> voProducts){
+    public List<Product> convertListToEntity(List<ProductDTO> voProducts){
         List<Product> resultList = new ArrayList<>();
-        voProducts.forEach(productVO -> resultList.add(convertVoToEntity(productVO)));
+        voProducts.forEach(productDTO -> resultList.add(convertDTOToEntity(productDTO)));
         return resultList;
     }
 }

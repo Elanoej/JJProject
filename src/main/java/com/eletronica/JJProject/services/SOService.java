@@ -2,7 +2,7 @@ package com.eletronica.JJProject.services;
 
 import com.eletronica.JJProject.controllers.ClientController;
 import com.eletronica.JJProject.controllers.SOController;
-import com.eletronica.JJProject.data.vo.v1.ServiceOrderVO;
+import com.eletronica.JJProject.data.dto.v1.ServiceOrderDTO;
 import com.eletronica.JJProject.exceptions.ResourceNotFoundException;
 import com.eletronica.JJProject.mapper.ServiceOrderMapper;
 import com.eletronica.JJProject.repositories.ServiceOrderRepository;
@@ -28,51 +28,45 @@ public class SOService {
     @Autowired
     private ServiceOrderMapper mapper;
 
-    public List<ServiceOrderVO> findAll(){
+    public List<ServiceOrderDTO> findAll(){
         logger.info("Finding all services-orders");
-        var vos = mapper.convertListToVO(repository.findAll(Sort.by("id")));
-        vos = vos.stream().map(serviceOrderVO -> {
-            serviceOrderVO.add(linkTo(methodOn(SOController.class).findById(serviceOrderVO.getKey())).withSelfRel());
-            serviceOrderVO.add(linkTo(methodOn(ClientController.class).findById(serviceOrderVO.getClient().getId())).withRel("client"));
-            return serviceOrderVO;
-        }).collect(Collectors.toList());
-        return vos;
+        var dtos = mapper.convertListToDTO(repository.findAll(Sort.by("id")));
+        return dtos.stream().map(this::addHateoas).collect(Collectors.toList());
     }
 
-    public ServiceOrderVO findById(Integer id){
+    public ServiceOrderDTO findById(Integer id){
         logger.info("Finding one ServiceOrder");
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
-        var vo = mapper.convertEntityToVO(entity);
-        vo.add(linkTo(methodOn(SOController.class).findById(vo.getKey())).withSelfRel());
-        vo.add(linkTo(methodOn(ClientController.class).findById(vo.getClient().getId())).withRel("client"));
-        return vo;
+        var dto = mapper.convertEntityToDTO(entity);
+
+        return addHateoas(dto);
     }
 
-    public ServiceOrderVO create(ServiceOrderVO serviceVO){
+    public ServiceOrderDTO create(ServiceOrderDTO serviceOrderDTO){
         logger.info("Creating one ServiceOrder");
 
-        var entity = mapper.convertVOToEntity(serviceVO);
-        var vo = mapper.convertEntityToVO(repository.save(entity));
-        vo.add(linkTo(methodOn(SOController.class).findById(vo.getKey())).withSelfRel());
-        return vo;
+        var serviceOrders = repository.findByClientId(serviceOrderDTO.getClient().getId());
+        serviceOrderDTO.setClient(serviceOrders.get(0).getClient());
+        var dto = mapper.convertEntityToDTO(repository.save(mapper.convertDTOToEntity(serviceOrderDTO)));
+
+        return addHateoas(dto);
     }
 
-    public ServiceOrderVO update(ServiceOrderVO serviceVO){
+    public ServiceOrderDTO update(ServiceOrderDTO serviceOrderDTO){
         logger.info("Updating one ServiceOrder");
 
-        var entity = repository.findById(serviceVO.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        var entity = repository.findById(serviceOrderDTO.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-        entity.setDate(serviceVO.getDate());
-        entity.setClient(serviceVO.getClient());
-        entity.setProductDetails(serviceVO.getProductDetails());
-        entity.setProductModel(serviceVO.getProductModel());
-        entity.setClientInfos(serviceVO.getClientInfos());
-        entity.setTecInfos(serviceVO.getTecInfos());
+        entity.setDate(serviceOrderDTO.getDate());
+        entity.setClient(serviceOrderDTO.getClient());
+        entity.setProductDetails(serviceOrderDTO.getProductDetails());
+        entity.setProductModel(serviceOrderDTO.getProductModel());
+        entity.setClientInfos(serviceOrderDTO.getClientInfos());
+        entity.setTecInfos(serviceOrderDTO.getTecInfos());
 
-        var vo = mapper.convertEntityToVO(repository.save(entity));
-        vo.add(linkTo(methodOn(SOController.class).findById(vo.getKey())).withSelfRel());
-        return vo;
+        var dto = mapper.convertEntityToDTO(repository.save(entity));
+        return addHateoas(dto);
     }
 
     public void delete(Integer id){
@@ -80,5 +74,11 @@ public class SOService {
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         repository.delete(entity);
+    }
+
+    private ServiceOrderDTO addHateoas(ServiceOrderDTO dto){
+        dto.add(linkTo(methodOn(SOController.class).findById(dto.getKey())).withSelfRel());
+        dto.add(linkTo(methodOn(ClientController.class).findById(dto.getClient().getId())).withRel("client"));
+        return dto;
     }
 }

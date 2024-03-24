@@ -1,6 +1,6 @@
 package com.eletronica.JJProject.controllers;
 
-import com.eletronica.JJProject.data.vo.v1.ProductVO;
+import com.eletronica.JJProject.data.dto.v1.ProductDTO;
 import com.eletronica.JJProject.services.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,24 +21,24 @@ public class ProductController {
     private ProductService service;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ProductVO>> findAll(){
+    public ResponseEntity<List<ProductDTO>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductVO> findById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<ProductDTO> findById(@PathVariable(value = "id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductVO> create(@RequestBody ProductVO product){
+    public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO product){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(product));
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductVO> update(@RequestBody ProductVO product){
+    public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO product){
         return  ResponseEntity.status(HttpStatus.OK).body(service.update(product));
     }
 

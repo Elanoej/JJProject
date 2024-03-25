@@ -1,6 +1,5 @@
 package com.eletronica.JJProject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -17,19 +16,18 @@ public class Client implements Serializable {
     private Integer id;
     @Column(nullable = false)
     private String name;
-    @Column
-    private String address;
+    @Embedded
+    private Address address;
     @Column(nullable = false)
     private String cellphone;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ServiceOrder> serviceOrders = new HashSet<>();
 
     public Client(){
     }
 
-    public Client(Integer id, String name, String address, String cellphone){
+    public Client(Integer id, String name, Address address, String cellphone){
         this.id = id;
         this.name = name;
         this.address = address;
@@ -52,11 +50,11 @@ public class Client implements Serializable {
         this.name = name;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

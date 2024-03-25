@@ -1,7 +1,7 @@
 package com.eletronica.JJProject.services;
 
 import com.eletronica.JJProject.controllers.ClientController;
-import com.eletronica.JJProject.controllers.SOController;
+import com.eletronica.JJProject.controllers.ServiceOrderController;
 import com.eletronica.JJProject.data.dto.v1.ClientDTO;
 import com.eletronica.JJProject.exceptions.ResourceNotFoundException;
 import com.eletronica.JJProject.mapper.ClientMapper;
@@ -74,7 +74,7 @@ public class ClientService {
     private ClientDTO addHateoas(ClientDTO dto){
         dto.add(linkTo(methodOn(ClientController.class).findById(dto.getKey())).withSelfRel());
         if(!dto.getServiceOrders().isEmpty()){
-            dto.getServiceOrders().forEach(so -> dto.add(linkTo(methodOn(SOController.class).findById(so.getId())).withRel("service-order")));
+            dto.getServiceOrders().forEach(so -> dto.add(linkTo(methodOn(ServiceOrderController.class).findById(so.getId())).withRel("service-order")));
         }
         return dto;
     }

@@ -2,6 +2,7 @@ package com.eletronica.JJProject.mapper;
 
 import com.eletronica.JJProject.data.dto.v1.ServiceOrderDTO;
 import com.eletronica.JJProject.model.ServiceOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -11,11 +12,14 @@ import java.util.List;
 @Service
 public class ServiceOrderMapper {
 
+    @Autowired
+    private ClientMapper mapper;
+
     public ServiceOrderDTO convertEntityToDTO(ServiceOrder serviceOrder){
         ServiceOrderDTO dto = new ServiceOrderDTO();
         dto.setKey(serviceOrder.getId());
         dto.setDate(serviceOrder.getDate());
-        dto.setClient(serviceOrder.getClient());
+        dto.setClient(mapper.convertEntityToDTO(serviceOrder.getClient()));
         dto.setProductDetails(serviceOrder.getProductDetails());
         dto.setProductModel(serviceOrder.getProductModel());
         dto.setClientInfos(serviceOrder.getClientInfos());
@@ -31,7 +35,7 @@ public class ServiceOrderMapper {
         }else{
             entity.setDate(serviceOrderDTO.getDate());
         }
-        entity.setClient(serviceOrderDTO.getClient());
+        entity.setClient(mapper.convertDTOToEntity(serviceOrderDTO.getClient()));
         entity.setProductDetails(serviceOrderDTO.getProductDetails());
         entity.setProductModel(serviceOrderDTO.getProductModel());
         entity.setClientInfos(serviceOrderDTO.getClientInfos());

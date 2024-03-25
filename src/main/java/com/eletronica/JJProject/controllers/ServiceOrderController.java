@@ -1,7 +1,7 @@
 package com.eletronica.JJProject.controllers;
 
 import com.eletronica.JJProject.data.dto.v1.ServiceOrderDTO;
-import com.eletronica.JJProject.services.SOService;
+import com.eletronica.JJProject.services.ServiceOrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,10 @@ import java.util.List;
 @RestController
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/api/service-order")
-public class SOController {
+public class ServiceOrderController {
 
     @Autowired
-    private SOService service;
+    private ServiceOrderService service;
 
     @GetMapping
     public ResponseEntity<List<ServiceOrderDTO>> findAll() {

@@ -1,8 +1,8 @@
 package com.eletronica.JJProject.data.dto.v1;
 
+import com.eletronica.JJProject.model.Address;
 import com.eletronica.JJProject.model.ServiceOrder;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
@@ -17,9 +17,10 @@ public class ClientDTO extends RepresentationModel<ClientDTO> implements Seriali
     @JsonProperty("id")
     private Integer key;
     private String name;
-    private String address;
+    private Address address;
     private String cellphone;
 
+    @JsonIgnore
     private Set<ServiceOrder> serviceOrders = new HashSet<>();
 
     public ClientDTO() {
@@ -40,11 +41,11 @@ public class ClientDTO extends RepresentationModel<ClientDTO> implements Seriali
         this.name = name;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

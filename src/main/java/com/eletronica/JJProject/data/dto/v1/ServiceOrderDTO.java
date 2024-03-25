@@ -1,21 +1,20 @@
 package com.eletronica.JJProject.data.dto.v1;
 
-import com.eletronica.JJProject.model.Client;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonPropertyOrder({"id", "date", "client", "productModel", "productDetails", "clientInfos", "tecInfos"})
 public class ServiceOrderDTO extends RepresentationModel<ServiceOrderDTO> implements Serializable {
 
     @JsonProperty("id")
     private Integer key;
     private Instant date;
-    private Client client;
+    private ClientDTO client;
     private String productModel;
     private String productDetails;
     private String clientInfos;
@@ -24,7 +23,7 @@ public class ServiceOrderDTO extends RepresentationModel<ServiceOrderDTO> implem
     public ServiceOrderDTO(){
     }
 
-    public ServiceOrderDTO(Integer key, Instant date, Client client, String productModel, String productDetails, String clientInfos, String tecInfos) {
+    public ServiceOrderDTO(Integer key, Instant date, ClientDTO client, String productModel, String productDetails, String clientInfos, String tecInfos) {
         this.key = key;
         this.date = date;
         this.client = client;
@@ -50,11 +49,11 @@ public class ServiceOrderDTO extends RepresentationModel<ServiceOrderDTO> implem
         this.date = date;
     }
 
-    public Client getClient() {
+    public ClientDTO getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(ClientDTO client) {
         this.client = client;
     }
 

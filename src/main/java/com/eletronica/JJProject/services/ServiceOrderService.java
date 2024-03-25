@@ -1,7 +1,7 @@
 package com.eletronica.JJProject.services;
 
 import com.eletronica.JJProject.controllers.ClientController;
-import com.eletronica.JJProject.controllers.SOController;
+import com.eletronica.JJProject.controllers.ServiceOrderController;
 import com.eletronica.JJProject.data.dto.v1.ServiceOrderDTO;
 import com.eletronica.JJProject.exceptions.ResourceNotFoundException;
 import com.eletronica.JJProject.mapper.ServiceOrderMapper;
@@ -18,12 +18,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-public class SOService {
+public class ServiceOrderService {
 
     private Logger logger = Logger.getLogger(ProductService.class.getName());
 
     @Autowired
     private ServiceOrderRepository repository;
+
+    @Autowired
+    private ClientService clientService;
 
     @Autowired
     private ServiceOrderMapper mapper;
@@ -45,9 +48,8 @@ public class SOService {
 
     public ServiceOrderDTO create(ServiceOrderDTO serviceOrderDTO){
         logger.info("Creating one ServiceOrder");
-
-        var serviceOrders = repository.findByClientId(serviceOrderDTO.getClient().getId());
-        serviceOrderDTO.setClient(serviceOrders.get(0).getClient());
+        var client = clientService.findById(serviceOrderDTO.getClient().getKey());
+        serviceOrderDTO.setClient(client);
         var dto = mapper.convertEntityToDTO(repository.save(mapper.convertDTOToEntity(serviceOrderDTO)));
 
         return addHateoas(dto);
@@ -57,13 +59,13 @@ public class SOService {
         logger.info("Updating one ServiceOrder");
 
         var entity = repository.findById(serviceOrderDTO.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
-
-        entity.setDate(serviceOrderDTO.getDate());
-        entity.setClient(serviceOrderDTO.getClient());
-        entity.setProductDetails(serviceOrderDTO.getProductDetails());
-        entity.setProductModel(serviceOrderDTO.getProductModel());
-        entity.setClientInfos(serviceOrderDTO.getClientInfos());
-        entity.setTecInfos(serviceOrderDTO.getTecInfos());
+        var serviceOrder = mapper.convertDTOToEntity(serviceOrderDTO);
+        entity.setDate(serviceOrder.getDate());
+        entity.setClient(serviceOrder.getClient());
+        entity.setProductDetails(serviceOrder.getProductDetails());
+        entity.setProductModel(serviceOrder.getProductModel());
+        entity.setClientInfos(serviceOrder.getClientInfos());
+        entity.setTecInfos(serviceOrder.getTecInfos());
 
         var dto = mapper.convertEntityToDTO(repository.save(entity));
         return addHateoas(dto);
@@ -77,8 +79,8 @@ public class SOService {
     }
 
     private ServiceOrderDTO addHateoas(ServiceOrderDTO dto){
-        dto.add(linkTo(methodOn(SOController.class).findById(dto.getKey())).withSelfRel());
-        dto.add(linkTo(methodOn(ClientController.class).findById(dto.getClient().getId())).withRel("client"));
+        dto.add(linkTo(methodOn(ServiceOrderController.class).findById(dto.getKey())).withSelfRel());
+        dto.add(linkTo(methodOn(ClientController.class).findById(dto.getClient().getKey())).withRel("client"));
         return dto;
     }
 }

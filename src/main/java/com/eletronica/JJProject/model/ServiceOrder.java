@@ -1,6 +1,5 @@
 package com.eletronica.JJProject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -17,8 +16,7 @@ public class ServiceOrder implements Serializable {
     private Integer id;
     private Instant date;
 
-    @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client-id")
     private Client client;
     private String productModel;

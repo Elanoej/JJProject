@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-class SOServiceTest {
+class ServiceOrderServiceTest {
 
     @Mock
     private ServiceOrderRepository repository;

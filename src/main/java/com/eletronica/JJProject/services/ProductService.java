@@ -71,6 +71,14 @@ public class ProductService {
         repository.delete(entity);
     }
 
+    public List<ProductDTO> findByName(String name){
+        var dtos = mapper.convertListToVO(repository.findAll());
+        return dtos.stream()
+                .filter(dto -> dto.getName().toLowerCase().contains(name.toLowerCase()))
+                .map(this::addHateoas)
+                .collect(Collectors.toList());
+    }
+
     private ProductDTO addHateoas(ProductDTO dto){
         dto.add(linkTo(methodOn(ProductController.class).findById(dto.getKey())).withSelfRel());
         return dto;

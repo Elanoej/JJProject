@@ -78,6 +78,11 @@ public class ServiceOrderService {
         repository.delete(entity);
     }
 
+    public List<ServiceOrderDTO> findByClientName(String name){
+        var dtos = mapper.convertListToDTO(repository.findByClientName(name));
+        return dtos.stream().map(this::addHateoas).collect(Collectors.toList());
+    }
+
     private ServiceOrderDTO addHateoas(ServiceOrderDTO dto){
         dto.add(linkTo(methodOn(ServiceOrderController.class).findById(dto.getKey())).withSelfRel());
         dto.add(linkTo(methodOn(ClientController.class).findById(dto.getClient().getKey())).withRel("client"));

@@ -79,6 +79,11 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public List<ProductDTO> findByAnyParam(String param){
+        var dtos = mapper.convertListToVO(repository.findByAnyParam(param));
+        return dtos.stream().map(this::addHateoas).collect(Collectors.toList());
+    }
+
     private ProductDTO addHateoas(ProductDTO dto){
         dto.add(linkTo(methodOn(ProductController.class).findById(dto.getKey())).withSelfRel());
         return dto;

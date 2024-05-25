@@ -26,9 +26,9 @@ public class SearchService {
 
     public List<SearchDTO> findAll(String search){
         List<SearchDTO> list = new ArrayList<>();
-        list.addAll(mapper.clientToList(clientService.findByName(search)));
-        list.addAll(mapper.productToList(productService.findByName(search)));
-        list.addAll(mapper.serviceOrderToList(serviceOrderService.findByClientName(search)));
+        list.addAll(mapper.clientToList(clientService.findByAnyParam(search)));
+        list.addAll(mapper.productToList(productService.findByAnyParam(search)));
+        list.addAll(mapper.serviceOrderToList(serviceOrderService.findByAnyParam(search)));
         return list;
     }
 }

@@ -5,6 +5,7 @@ import com.eletronica.JJProject.controllers.ServiceOrderController;
 import com.eletronica.JJProject.data.dto.v1.ServiceOrderDTO;
 import com.eletronica.JJProject.exceptions.ResourceNotFoundException;
 import com.eletronica.JJProject.mapper.ServiceOrderMapper;
+import com.eletronica.JJProject.model.ServiceOrder;
 import com.eletronica.JJProject.repositories.ServiceOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -80,6 +81,11 @@ public class ServiceOrderService {
 
     public List<ServiceOrderDTO> findByClientName(String name){
         var dtos = mapper.convertListToDTO(repository.findByClientName(name));
+        return dtos.stream().map(this::addHateoas).collect(Collectors.toList());
+    }
+
+    public List<ServiceOrderDTO> findByAnyParam(String param){
+        var dtos = mapper.convertListToDTO(repository.findByAnyParam(param));
         return dtos.stream().map(this::addHateoas).collect(Collectors.toList());
     }
 

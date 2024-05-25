@@ -76,6 +76,11 @@ public class ClientService {
         return dtos.stream().map(this::addHateoas).collect(Collectors.toList());
     }
 
+    public List<ClientDTO> findByAnyParam(String param){
+        var dtos = mapper.convertListToDTO(repository.findByAnyParams(param));
+        return dtos.stream().map(this::addHateoas).collect(Collectors.toList());
+    }
+
     private ClientDTO addHateoas(ClientDTO dto){
         dto.add(linkTo(methodOn(ClientController.class).findById(dto.getKey())).withSelfRel());
         if(!dto.getServiceOrders().isEmpty()){
